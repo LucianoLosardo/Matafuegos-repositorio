@@ -1,0 +1,27 @@
+# --- Framework Core ---
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+
+# --- Base de Datos (PostgreSQL & ORM) ---
+# SQLModel combina SQLAlchemy y Pydantic (perfecto para FastAPI)
+sqlmodel==0.0.22
+# Driver nativo para conectar Python con Postgres
+psycopg2-binary==2.9.9
+# Herramienta para migraciones de base de datos (como en Go)
+alembic==1.13.2
+
+# --- Seguridad y Autenticación ---
+python-jose[cryptography]==3.4.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.12
+
+
+# --- Configuración e IA ---
+# Para leer el archivo .env de forma segura
+pydantic-settings==2.5.0
+# SDK oficial para conectar con OpenAI (cuando lleguemos al Día 8)
+openai==1.50.0
+
+# --- Utilidades ---
+# Para manejar fechas y zonas horarias de forma precisa
+python-dateutil==2.9.0
