@@ -1,0 +1,31 @@
+services:
+  # Servicio de la Base de Datos (PostgreSQL)
+  db:
+    image: postgres:15
+    container_name: matafuegos_db
+    restart: always
+    environment:
+      - POSTGRES_USER=user_matafuegos
+      - POSTGRES_PASSWORD=password_segura
+      - POSTGRES_DB=db_matafuegos
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Servicio del Backend (FastAPI)
+  backend:
+    build: ./backend
+    container_name: matafuegos_backend
+    volumes:
+      - ./backend:/code  # Sincroniza cambios en tiempo real (Hot Reload)
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user_matafuegos:password_segura@db:5432/db_matafuegos
+    depends_on:
+      - db  # Espera a que la DB esté lista para arrancar el backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_data:

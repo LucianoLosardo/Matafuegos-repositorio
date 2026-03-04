@@ -24,4 +24,4 @@ COPY . /code/
 
 # 7. Comando para ejecutar la app (usando el módulo app.main como hicimos antes
 # Agregamos --reload y --host 0.0.0.0 para que sea accesible desde afuera
-CMD ["uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "8000", "--reload"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
