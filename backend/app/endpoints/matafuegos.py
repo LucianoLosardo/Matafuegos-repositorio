@@ -44,9 +44,10 @@ async def obtener_matafuegos(request: Request):
 def obtener_tabla_matafuegos(
     request: Request, 
     mes_busqueda: Optional[str] = None,
+    nombre_cliente: Optional[str] = None,
     session: Session = Depends(get_session)
 ):
-    # 1. LA MAGIA DEL JOIN: Pedimos ambas tablas y le decimos que las cruce
+
     query = select(Matafuego, Cliente).join(Cliente)
     
     if mes_busqueda:
@@ -60,11 +61,13 @@ def obtener_tabla_matafuegos(
         
         query = query.where(Matafuego.fecha_ultima_recarga <= fecha_limite)
 
-    # 2. Resultados: Esto ahora devuelve una lista de parejas (tuplas): 
-    # [(matafuego1, cliente1), (matafuego2, cliente2)...]
+    if nombre_cliente:
+        # .ilike() ignora si lo escribiste en mayúscula o minúscula. ¡Es mucho más seguro!
+        query = query.where(Cliente.nombre.ilike(f"%{nombre_cliente}%"))
+
     resultados_db = session.exec(query).all()
     
-    # 3. Le pasamos esos "resultados" a la plantilla
+
     return templates.TemplateResponse(
         "lista_matafuegos.html", 
         {"request": request, "resultados": resultados_db}
@@ -100,7 +103,7 @@ def crear_matafuego(
         # Esto es lo que HTMX va a inyectar al lado del botón
         return HTMLResponse(
             content="<span class='text-green-600 font-semibold'>✅ ¡Guardado con éxito!</span>",
-            headers={"HX-Trigger": "matafuego-guardado"}
+             headers={"HX-Trigger": "matafuego-guardado"}
         )
         
     except Exception as e:
