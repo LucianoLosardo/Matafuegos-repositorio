@@ -1,12 +1,17 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
 from sqlmodel import Session
 from app.db.sessions import create_db_and_tables, get_session, engine
 from app.endpoints import clientes, matafuegos
 from datetime import date
 from app.models.cliente import Cliente
 from app.models.matafuego import Matafuego
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles # Para el CSS después
 
 app = FastAPI(title="Sistema de Gestión de Matafuegos")
+
+# Configuramos las plantillas
+templates = Jinja2Templates(directory="app/templates")
 
 # Routers 
 
@@ -19,8 +24,8 @@ def on_startup():
     create_db_and_tables()
 
 @app.get("/")
-def home():
-    return {"mensaje": "Servidor de Matafuegos Online - Base de datos conectada"}
+def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/test-db")
 def test_db(session: Session = Depends(get_session)):
@@ -30,16 +35,16 @@ def test_db(session: Session = Depends(get_session)):
 
 
 def crear_datos_ejemplo(session: Session):
-    # 1. Creamos el objeto Cliente
-    nuevo_cliente = Cliente(
-        nombre="Luciano Ingenieria",
-        dni="20400500",
-        direccion="Av. Siempre Viva 742",
-        email="luciano@ejemplo.com",
-        telefono="1122334455"
+    nuevo_matafuego = Matafuego(
+        numero_serie="SERIE-123",
+        tipo="ABC",
+        capacidad="5kg",
+        fecha_ultima_recarga=date.today(),
+        anio_matafuego=2024,
+        id_cliente=1
     )
 
     with Session(engine) as session:  
-        session.add(nuevo_cliente)  
+        session.add(nuevo_matafuego)  
 
         session.commit()  
