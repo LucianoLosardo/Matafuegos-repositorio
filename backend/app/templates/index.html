@@ -6,7 +6,70 @@
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-8"> <div class="bg-white p-6 rounded-lg shadow-md mt-8 max-w-5xl mx-auto">
+<body class="bg-gray-100 p-8"> 
+
+    <div class="bg-white p-6 rounded-lg shadow-md max-w-5xl mx-auto">
+        <h2 class="text-xl mb-4 font-semibold text-blue-600">➕ Registrar Nuevo Matafuego</h2>
+        
+        <form hx-post="/matafuegos" 
+              hx-target="#mensaje-respuesta"
+              hx-swap="innerHTML"
+              hx-on:matafuego-guardado="this.reset()"
+              class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">N° de Serie</label>
+                <input type="text" name="numero_serie" required 
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+                <select name="tipo" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option value="ABC">Polvo ABC</option>
+                    <option value="CO2">CO2</option>
+                    <option value="Agua">HCFC</option>
+                    <option value="Espuma">AFFF</option>
+                    <option value="Espuma">K</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Capacidad (ej: 5kg)</label>
+                <input type="text" name="capacidad" required 
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de Recarga</label>
+                <input type="date" name="fecha_ultima_recarga" required 
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Año de Fabricación/PH</label>
+                <input type="number" name="anio_matafuego" required 
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">ID del Cliente</label>
+                <input type="number" name="id_cliente" required 
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div class="md:col-span-3 mt-2 flex items-center justify-between">
+                <button type="submit" 
+                        class="bg-blue-600 text-white px-6 py-2 rounded font-semibold hover:bg-blue-700 transition-colors shadow-sm">
+                    💾 Guardar Matafuego
+                </button>
+                
+                <div id="mensaje-respuesta" class="text-green-600 font-semibold"></div>
+            </div>
+        </form>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md mt-8 max-w-5xl mx-auto">
         <h2 class="text-xl mb-4 font-semibold text-red-600">Control de Vencimientos por Mes</h2>
         
         <form hx-get="/matafuegos/tabla" 

@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, Form
+from fastapi.responses import HTMLResponse
 from app.db.sessions import create_db_and_tables, get_session, engine
 from sqlmodel import Session, select
 from app.models.matafuego import Matafuego
@@ -68,3 +69,43 @@ def obtener_tabla_matafuegos(
         "lista_matafuegos.html", 
         {"request": request, "resultados": resultados_db}
     )
+
+@router.post("/")
+def crear_matafuego(
+    # Atajamos cada campo del formulario indicando que viene de un Form()
+    numero_serie: str = Form(...),
+    tipo: str = Form(...),
+    capacidad: str = Form(...),
+    fecha_ultima_recarga: date = Form(...),
+    anio_matafuego: int = Form(...),
+    id_cliente: int = Form(...),
+    session: Session = Depends(get_session)
+):
+    try:
+        # 1. Armamos el objeto con los datos que nos mandó HTMX
+        nuevo_matafuego = Matafuego(
+            numero_serie=numero_serie,
+            tipo=tipo,
+            capacidad=capacidad,
+            fecha_ultima_recarga=fecha_ultima_recarga,
+            anio_matafuego=anio_matafuego,
+            id_cliente=id_cliente
+        )
+        
+        # 2. Lo preparamos y lo guardamos en la base de datos
+        session.add(nuevo_matafuego)
+        session.commit()
+        
+        # 3. Devolvemos un pedacito de HTML con un mensaje de éxito
+        # Esto es lo que HTMX va a inyectar al lado del botón
+        return HTMLResponse(
+            content="<span class='text-green-600 font-semibold'>✅ ¡Guardado con éxito!</span>",
+            headers={"HX-Trigger": "matafuego-guardado"}
+        )
+        
+    except Exception as e:
+        # Si algo falla (ej: el id_cliente no existe), devolvemos un error en rojo
+        print(f"Error al guardar: {e}")
+        return HTMLResponse(
+            content="<span class='text-red-600 font-semibold'>❌ Error al guardar. Verifica el ID del cliente.</span>"
+        )
