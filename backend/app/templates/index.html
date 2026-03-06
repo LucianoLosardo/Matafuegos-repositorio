@@ -6,24 +6,40 @@
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-blue-600 p-4 text-white shadow-lg">
-        <h1 class="text-2xl font-bold">🧯 Control de Matafuegos</h1>
-    </nav>
-
-    <main class="p-8">
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-xl mb-4 font-semibold">Lista de Matafuegos</h2>
+<body class="bg-gray-100 p-8"> <div class="bg-white p-6 rounded-lg shadow-md mt-8 max-w-5xl mx-auto">
+        <h2 class="text-xl mb-4 font-semibold text-red-600">Control de Vencimientos por Mes</h2>
+        
+        <form hx-get="/matafuegos/tabla" 
+              hx-target="#lista-matafuegos" 
+              class="flex items-end gap-4 mb-6">
             
-            <button hx-get="/matafuegos/tabla" 
-                    hx-target="#lista-matafuegos" 
-                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                Cargar Matafuegos
+            <div>
+                <label for="mes_busqueda" class="block text-sm font-medium text-gray-700 mb-1">
+                    Ver vencidos al mes de:
+                </label>
+                <input type="month" 
+                       id="mes_busqueda" 
+                       name="mes_busqueda" 
+                       class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            
+            <button type="submit" 
+                    class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors shadow-sm">
+                🔍 Buscar Vencidos
             </button>
 
-            <div id="lista-matafuegos" class="mt-6">
-                </div>
+            <button type="button" 
+                    hx-get="/matafuegos/tabla" 
+                    hx-target="#lista-matafuegos"
+                    class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors shadow-sm ml-auto">
+                📋 Ver Todos
+            </button>
+        </form>
+
+        <div id="lista-matafuegos" class="overflow-x-auto">
+            <p class="text-gray-500 italic">Selecciona un mes para consultar los vencimientos.</p>
         </div>
-    </main>
+    </div>
+
 </body>
 </html>

@@ -7,11 +7,11 @@
             <th class="py-3 px-4 text-left font-semibold">Capacidad</th>
             <th class="py-3 px-4 text-left font-semibold">Última Recarga</th>
             <th class="py-3 px-4 text-left font-semibold">Año Fab.</th>
-            <th class="py-3 px-4 text-left font-semibold">ID Cliente</th>
+            <th class="py-3 px-4 text-left font-semibold">Cliente</th>
         </tr>
     </thead>
     <tbody class="text-gray-700">
-        {% for matafuego in matafuegos %}
+        {% for matafuego, cliente in resultados %}
         <tr class="border-b hover:bg-gray-50 transition-colors">
             <td class="py-3 px-4">{{ matafuego.id }}</td>
             <td class="py-3 px-4 font-medium">{{ matafuego.numero_serie }}</td>
@@ -23,7 +23,7 @@
             <td class="py-3 px-4">{{ matafuego.capacidad }}</td>
             <td class="py-3 px-4">{{ matafuego.fecha_ultima_recarga }}</td>
             <td class="py-3 px-4">{{ matafuego.anio_matafuego }}</td>
-            <td class="py-3 px-4 text-gray-500 font-mono">#{{ matafuego.id_cliente }}</td>
+            <td class="py-3 px-4 font-semibold text-indigo-600">{{ cliente.nombre }}</td>
         </tr>
         {% else %}
         <tr>
