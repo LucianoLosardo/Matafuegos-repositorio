@@ -1,0 +1,42 @@
+<table class="min-w-full bg-white border border-gray-200 shadow-sm rounded-lg overflow-hidden">
+    <thead class="bg-teal-700 text-white">
+        <tr>
+            <th class="py-3 px-4 text-left text-sm font-semibold">ID</th>
+            <th class="py-3 px-4 text-left text-sm font-semibold">Nombre / Razón Social</th>
+            <th class="py-3 px-4 text-left text-sm font-semibold">DNI / CUIT</th>
+            <th class="py-3 px-4 text-left text-sm font-semibold">Email</th>
+            <th class="py-3 px-4 text-left text-sm font-semibold">Teléfono</th>
+            <th class="py-3 px-4 text-left text-sm font-semibold">Dirección</th>
+            <th class="py-3 px-4 text-center text-sm font-semibold">Acciones</th> </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+        {% if clientes %}
+            {% for cliente in clientes %}
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="py-3 px-4 text-sm font-medium text-gray-900">{{ cliente.id }}</td>
+                <td class="py-3 px-4 text-sm text-gray-700 font-semibold">{{ cliente.nombre }}</td>
+                <td class="py-3 px-4 text-sm text-gray-700">{{ cliente.dni }}</td>
+                <td class="py-3 px-4 text-sm text-gray-700">{{ cliente.email }}</td>
+                <td class="py-3 px-4 text-sm text-gray-700">{{ cliente.telefono }}</td>
+                <td class="py-3 px-4 text-sm text-gray-700">{{ cliente.direccion }}</td>
+                <td class="py-3 px-4 text-center">
+                    <button type="button"
+                            hx-delete="/clientes/{{ cliente.id }}"
+                            hx-confirm="¿Estás seguro de que querés eliminar al cliente {{ cliente.nombre }}? Esta acción no se puede deshacer."
+                            hx-target="closest tr"
+                            hx-swap="outerHTML"
+                            class="text-white px-3 py-1 rounded shadow-sm bg-red-500 transition hover:bg-red-700 text-sm font-semibold">
+                        🗑️ Borrar
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="7" class="py-6 text-center text-gray-500 italic">
+                    Todavía no hay clientes registrados. 🤷‍♂️
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
