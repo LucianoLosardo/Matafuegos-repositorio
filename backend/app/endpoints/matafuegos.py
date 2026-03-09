@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Depends, Form
+from fastapi import APIRouter, Request, Depends, Form, HTTPException
 from fastapi.responses import HTMLResponse
 from app.db.sessions import create_db_and_tables, get_session, engine
 from sqlmodel import Session, select
@@ -41,7 +41,7 @@ async def obtener_matafuegos(request: Request):
     
 
 @router.get("/tabla")
-def obtener_tabla_matafuegos(
+async def obtener_tabla_matafuegos(
     request: Request, 
     mes_busqueda: Optional[str] = None,
     nombre_cliente: Optional[str] = None,
@@ -74,7 +74,7 @@ def obtener_tabla_matafuegos(
     )
 
 @router.post("/")
-def crear_matafuego(
+async def crear_matafuego(
     # Atajamos cada campo del formulario indicando que viene de un Form()
     numero_serie: str = Form(...),
     tipo: str = Form(...),
@@ -112,3 +112,19 @@ def crear_matafuego(
         return HTMLResponse(
             content="<span class='text-red-600 font-semibold'>❌ Error al guardar. Verifica el ID del cliente.</span>"
         )
+    
+
+@router.delete("/{matafuego_id}", response_class=HTMLResponse)
+async def borrar_matafuego(matafuego_id: int, session: Session = Depends(get_session)):
+    # Buscamos el cliente en la base de datos
+    matafuego_a_borrar = session.get(Matafuego, matafuego_id)
+    
+    # Si por alguna razón no existe, tiramos un error 404
+    if not matafuego_a_borrar:
+        raise HTTPException(status_code=404, detail="Matafuego no encontrado")
+    
+    # Lo borramos y guardamos los cambios
+    session.delete(matafuego_a_borrar)
+    session.commit()
+    
+    return ""

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Depends, Form
+from fastapi import APIRouter, Request, Depends, Form, HTTPException
 from fastapi.responses import HTMLResponse
 from app.db.sessions import create_db_and_tables, get_session, engine
 from sqlmodel import Session, select
@@ -39,7 +39,7 @@ async def obtener_clientes(
     )
 
 @router.post("/", response_class=HTMLResponse)
-def crear_cliente(
+async def crear_cliente(
     # Recibimos los datos exactos que manda el atributo "name" del HTML
     nombre: str = Form(...), # Los tres puntitos significan que es obligatorio
     dni: str | None = Form(None),
@@ -92,3 +92,18 @@ def crear_cliente(
         ✅ ¡Cliente <strong>{nuevo_cliente.nombre}</strong> guardado con éxito!
     </div>
     """
+
+@router.delete("/{cliente_id}", response_class=HTMLResponse)
+async def borrar_cliente(cliente_id: int, session: Session = Depends(get_session)):
+    # Buscamos el cliente en la base de datos
+    cliente_a_borrar = session.get(Cliente, cliente_id)
+    
+    # Si por alguna razón no existe, tiramos un error 404
+    if not cliente_a_borrar:
+        raise HTTPException(status_code=404, detail="Cliente no encontrado")
+    
+    # Lo borramos y guardamos los cambios
+    session.delete(cliente_a_borrar)
+    session.commit()
+    
+    return ""
