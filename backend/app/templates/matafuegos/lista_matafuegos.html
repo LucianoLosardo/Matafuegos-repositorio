@@ -8,7 +8,7 @@
             <th class="py-3 px-4 text-left font-semibold">Última Recarga</th>
             <th class="py-3 px-4 text-left font-semibold">Año Fab/PH.</th>
             <th class="py-3 px-4 text-left font-semibold">Cliente</th>
-            <th class="py-3 px-4 text-center text-sm font-semibold">Acciones</th> </tr>
+            <th class="py-3 px-4 text-center text-sm font-semibold print:hidden">Acciones</th> </tr>
         </tr>
     </thead>
     <tbody class="text-gray-700">
@@ -25,7 +25,7 @@
             <td class="py-3 px-4">{{ matafuego.fecha_ultima_recarga }}</td>
             <td class="py-3 px-4">{{ matafuego.anio_matafuego }}</td>
             <td class="py-3 px-4 font-semibold text-indigo-600">{{ cliente.nombre }}</td>
-             <td class="py-3 px-4 text-center">
+             <td class="py-3 px-4 text-center print:hidden">
                     <button type="button"
                             hx-delete="/matafuegos/{{ matafuego.id }}"
                             hx-confirm="¿Estás seguro de que querés eliminar el matafuego {{ cliente.numero_serie }}? Esta acción no se puede deshacer."

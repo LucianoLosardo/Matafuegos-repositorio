@@ -7,7 +7,7 @@
             <th class="py-3 px-4 text-left text-sm font-semibold">Email</th>
             <th class="py-3 px-4 text-left text-sm font-semibold">Teléfono</th>
             <th class="py-3 px-4 text-left text-sm font-semibold">Dirección</th>
-            <th class="py-3 px-4 text-center text-sm font-semibold">Acciones</th> </tr>
+            <th class="py-3 px-4 text-center text-sm font-semibold print:hidden">Acciones</th> </tr>
     </thead>
     <tbody class="divide-y divide-gray-200">
         {% if clientes %}
@@ -19,7 +19,7 @@
                 <td class="py-3 px-4 text-sm text-gray-700">{{ cliente.email }}</td>
                 <td class="py-3 px-4 text-sm text-gray-700">{{ cliente.telefono }}</td>
                 <td class="py-3 px-4 text-sm text-gray-700">{{ cliente.direccion }}</td>
-                <td class="py-3 px-4 text-center">
+                <td class="py-3 px-4 text-center print:hidden">
                     <button type="button"
                             hx-delete="/clientes/{{ cliente.id }}"
                             hx-confirm="¿Estás seguro de que querés eliminar al cliente {{ cliente.nombre }}? Esta acción no se puede deshacer."
